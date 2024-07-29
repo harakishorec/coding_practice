@@ -32,92 +32,147 @@ TC: O(n),  SC: O(n)
 
 public class Q3_MaxStck_Updated {
 
-    List<Integer> stack = new LinkedList<>();
-    List<Integer> maxStack = new LinkedList<>();
+        public static LinkedList<Integer> stack = new LinkedList<>();
+        public static LinkedList<Integer> maxStack = new LinkedList<>();
 
-    //TC:O(1)
-    public void push(int val){
-        stack.add(0,val);
-        if(maxStack.isEmpty() || val>=maxStack.get(0)){
-            maxStack.add(0,val);
-        }
-    }
 
-    //TC:O(1)
-    public Integer pop(){
-        if(stack.isEmpty() || maxStack.isEmpty()){
-            throw new EmptyStackException();
+        public static void push(int val){
+            stack.add(0,val);
+            if(maxStack.isEmpty() || val > maxStack.get(0)){
+                maxStack.add(0,val);
+            }
         }
-        int val = stack.get(0);
-        stack.remove(0);
-        if(val == maxStack.get(0)){
+
+        public static int pop(){
+
+            if(stack.isEmpty() || maxStack.isEmpty()){
+                throw new EmptyStackException();
+            }
+            int val = stack.get(0);
+            stack.remove(0);
+            if(maxStack.get(0) == val){
+                maxStack.remove(0);
+            }
+            checkMax();
+            return val;
+        }
+
+        public static int max(){
+
+            if(maxStack.isEmpty()){
+                throw new EmptyStackException();
+            }
+            return maxStack.get(0);
+        }
+
+        public static int popMax(){
+
+            if(stack.isEmpty() || maxStack.isEmpty()){
+                throw new EmptyStackException();
+            }
+
+            int val = maxStack.get(0);
             maxStack.remove(0);
-        }
-        return val;
-    }
 
-    //TC:O(1)
-    public Integer max(){
-        if(stack.isEmpty() || maxStack.isEmpty()){
-            throw new EmptyStackException();
-        }
-        return maxStack.get(0);
-    }
+            int index = -1;
 
-    //O(n)
-    public Integer popMax(){
-        if(stack.isEmpty() || maxStack.isEmpty()){
-            throw new EmptyStackException();
-        }
-        int val = maxStack.get(0);
-        maxStack.remove(0);
-        int max = Integer.MIN_VALUE;
-        int index =-1;
-
-        for(int i =0; i< stack.size();i++){
-            if(stack.get(i) == val && index ==-1){
-                index = i;
-                break;
+            for(int i =0; i<stack.size(); i++){
+                if(val == stack.get(i) && index == -1){
+                    index = i;
+                    break;
+                }
             }
-        }
-        stack.remove(index);
 
-        for(int i =0; i< stack.size();i++){
-            int temp = stack.get(i);
-            if(temp>max){
-                max= temp;
+            stack.remove(index);
+            checkMax();
+
+            return val;
+        }
+
+        public static void checkMax(){
+
+            int maxv = Integer.MIN_VALUE;
+
+            for(int i =0; i<stack.size(); i++){
+                if(maxv < stack.get(i)){
+                    maxv = stack.get(i);
+                }
+            }
+
+            if(maxStack.get(0) < maxv){
+                maxStack.add(0,maxv);
             }
 
         }
-        if(!maxStack.contains(max))
-            maxStack.add(0,max);
-        return val;
+
+        @Override
+        public String toString(){
+            return "Stack: "+stack + " "+ "MaxStack: "+ maxStack;
+        }
+
+
+        public static void main(String[] args) {
+
+            Q3_Stack st = new Q3_Stack();
+            st.push(1);
+            st.push(1);
+            st.push(1);
+            st.push(4);
+            st.push(4);
+            st.push(4);
+            st.push(4);
+            st.push(5);
+            st.push(5);
+            st.push(5);
+            st.push(6);
+            st.push(6);
+            st.push(10);
+            st.push(13);
+            st.push(13);
+            st.push(13);
+            System.out.println(st);
+            st.push(1);
+            st.push(1);
+            st.push(1);
+            st.push(4);
+            st.push(4);
+            System.out.println(st);
+
+            System.out.println(st.max());
+            System.out.println("Max: "+st);
+//
+            System.out.println(st.popMax());
+            System.out.println("PopMax: "+st);
+//
+            System.out.println(st.popMax());
+            System.out.println("PopMax: "+st);
+//
+            System.out.println(st.popMax());
+            System.out.println("PopMax: "+st);
+
+            System.out.println(st.popMax());
+            System.out.println("PopMax: "+st);
+
+            System.out.println(st.max());
+            System.out.println("Max: "+st);
+
+            System.out.println(st.pop());
+            System.out.println("Pop: "+st);
+
+            System.out.println(st.pop());
+            System.out.println("Pop: "+st);
+
+            System.out.println(st.popMax());
+            System.out.println("PopMax: "+st);
+
+            System.out.println(st.popMax());
+            System.out.println("PopMax: "+st);
+
+            System.out.println(st.popMax());
+            System.out.println("PopMax: "+st);
+
+//        System.out.println(st.pop());
+//        System.out.println("Pop: "+st);
+        }
     }
 
-    @Override
-    public String toString() {
-        return
-                "stack=" + stack +
-                ", maxStack=" + maxStack
-                ;
-    }
-
-    public static void main(String[] args) {
-        Q3_MaxStck_Updated stack = new Q3_MaxStck_Updated();
-        stack.push(5);
-        stack.push(1);
-        stack.push(6);
-        System.out.println(stack);
-        System.out.println(stack.pop());
-        System.out.println(stack);
-        System.out.println(stack.max());
-        System.out.println(stack);
-        stack.push(3);
-        stack.push(8);
-        System.out.println(stack);
-        System.out.println(stack.max());
-        System.out.println(stack.popMax());
-        System.out.println(stack);
-
-    }
-}
